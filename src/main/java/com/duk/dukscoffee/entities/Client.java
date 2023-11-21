@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
-
 
 @Data
 @AllArgsConstructor

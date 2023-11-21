@@ -1,14 +1,29 @@
+-- -------------------------------------------------------------------------------------------------------------------------
+-- Drop tables before
+
+DROP TABLE orders_x_products;
+DROP TABLE categories_products;
+DROP TABLE orders;
+DROP TABLE categories;
+DROP TABLE products;
+DROP TABLE stock;
+DROP TABLE bills;
+DROP TABLE users;
+DROP TABLE clients;
+
+-- --------------------------------------------------------------------------------------------------------------------------
+
 -- Create product table.
 CREATE TABLE IF NOT EXISTS products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
-    basePrice DOUBLE,
+    base_price DOUBLE,
     amount INT,
-    lowStock BOOLEAN,
+    low_stock BOOLEAN,
     active BOOLEAN,
     sell BOOLEAN,
     available BOOLEAN,
-    deleted BOOLEAN,
+    deleted BOOLEAN
 );
 
 -- Create category table.
@@ -22,57 +37,58 @@ CREATE TABLE IF NOT EXISTS stock (
     id INT AUTO_INCREMENT PRIMARY KEY,
     amount INT,
     stock INT,
-    lastUpdate DATE,
+    last_update DATE
 );
 
 -- Create Order table.
 CREATE TABLE IF NOT EXISTS orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    date DATE,
+    date DATE
 );
 
 -- Create Bill table.
 CREATE TABLE IF NOT EXISTS bills (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    basePrice DOUBLE,
+    base_price DOUBLE,
     iva BOOLEAN,
-    totalPrice DOUBLE,
+    total_price DOUBLE,
     discounts DOUBLE,
-    billDate DATE,
+    bill DATE
 );
 
 -- Create Client table.
 CREATE TABLE IF NOT EXISTS clients (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
-    lastName VARCHAR(255),
+    last_name VARCHAR(255),
     email VARCHAR(255) UNIQUE,
-    cardId VARCHAR(255) UNIQUE,
+    card_id VARCHAR(255) UNIQUE,
     gender CHAR(1),
-    birthDay DATE,
+    birth_day DATE,
     active BOOLEAN,
-    lastVisit DATE,
+    last_visit DATE,
     address VARCHAR(255),
     phone VARCHAR(255)
 );
 
 -- Create User table.
-CREATE TABLE IF NOT EXISTS UserEntity (
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    firstName VARCHAR(255),
-    lastName VARCHAR(255),
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
     email VARCHAR(255),
     password VARCHAR(255),
-    rol VARCHAR(255),
+    rol VARCHAR(255)
 );
 
+-- ---------------------------------------------------------------------------------------------------------------------------
 
 ------------------------------- CONSTRAINT ABOUT FOREIGN KEY -------------------------------------
 
 -- FOREIGN KEY product with stock.
 ALTER TABLE products
-    ADD COLUMN stock_id INT NOT NULL
-    ADD CONSTRAINT 'fk_stock_id' FOREIGN KEY (stock_id)
+    ADD COLUMN stock_id INT NOT NULL,
+    ADD CONSTRAINT fk_stock_id FOREIGN KEY (stock_id)
     REFERENCES stock (id);
 
 -- FOREIGN KEY order with users, bill and client.
@@ -83,6 +99,8 @@ ALTER TABLE orders
     ADD CONSTRAINT fk_client_id FOREIGN KEY (client_id) REFERENCES clients (id),
     ADD COLUMN bill_id INT NOT NULL,
     ADD CONSTRAINT fk_bill_id FOREIGN KEY (bill_id) REFERENCES bills (id);
+
+-- ------------------------------------------------------------------------------------------------------------------------------
 
 ------------------------------- Create Tables Many to MANY  -------------------------------------
 CREATE TABLE IF NOT EXISTS categories_products (
@@ -102,6 +120,62 @@ CREATE TABLE IF NOT EXISTS orders_x_products (
    FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
+-- ----------------------------------------------------------------------------------------------------------------------------------
+
 ------------------------------- INSERT VALUES  -------------------------------------
+-- Insert data in users table
+INSERT INTO users (first_name, last_name, email, password, rol)
+VALUES
+('John', 'Doe' , 'admin@example.com', 'admin123', 'ROLE_ADMIN'),
+('Janne', 'Doe' , 'jannedoe@example.com', 'janne123', 'ROLE_EMPLOYEE');
+
+-- Insert data in clients table
+INSERT INTO clients (name, last_name, email, card_id, gender, birth_day, active, last_visit, address, phone)
+VALUES
+('Juan', 'Perez', 'juan@example.com', 'ABC123', 'M', '1990-01-15', true, '2023-11-21', 'Calle 123', '123-456-7890'),
+('Maria', 'Gomez', 'maria@example.com', 'XYZ789', 'F', '1985-05-10', true, '2023-11-20', 'Avenida 456', '987-654-3210');
+
+-- Insert data in stock table
+INSERT INTO stock (amount, stock, last_update)
+VALUES
+(100, 80, '2023-11-21'),
+(150, 120, '2023-11-20');
+
+-- Insert data in products table
+INSERT INTO products (name, base_price, amount, low_stock, active, sell, available, deleted, stock_id)
+VALUES
+('Producto1', 29.99, 50, false, true, true, true, false, 1),
+('Producto2', 39.99, 30, false, true, true, true, false, 2);
+
+-- Insert data in categories table
+INSERT INTO categories (name)
+VALUES
+('Electrónicos'),
+('Ropa');
+
+-- Insert data in categories_products table
+INSERT INTO categories_products (product_id, category_id)
+VALUES
+(1, 1),
+(2, 2);
+
+-- Insert data in bills table
+INSERT INTO bills (base_price, iva, total_price, discounts, bill)
+VALUES
+(100.00, true, 120.00, 10.00, '2023-11-21'),
+(150.00, false, 150.00, 0.00, '2023-11-20');
+
+-- Insert data in orders table
+INSERT INTO orders (date, user_id, client_id, bill_id)
+VALUES
+('2023-11-21', 1, 1, 1),
+('2023-11-20', 2, 2, 2);
+
+-- Insert data in orders_x_products table
+INSERT INTO orders_x_products (product_id, category_id, amount)
+VALUES
+(1, 1, 5),
+(2, 2, 3);
+
 
 
