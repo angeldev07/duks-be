@@ -1,6 +1,7 @@
 package com.duk.dukscoffee.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -33,10 +35,16 @@ public class Order {
     @JsonBackReference
     private Client client;
 
+    // relation many to one with bill table
+    @ManyToOne
+    @JoinColumn(name = "bill_id")
+    @JsonBackReference
+    private Bill bill;
+
     // Relation many to many with products table.
-    @ManyToMany(mappedBy = "orders")
-    @JsonIgnoreProperties("orders")
-    private Set<Product> products;
+    @OneToMany(mappedBy = "order")
+    @JsonIgnore
+    private List<OrderXProduct> productoOrdenList;
 
     private Date date;
 
