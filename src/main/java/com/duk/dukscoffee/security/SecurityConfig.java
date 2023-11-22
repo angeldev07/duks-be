@@ -1,5 +1,6 @@
 package com.duk.dukscoffee.security;
 
+import com.duk.dukscoffee.respositories.UserEntityRepository;
 import com.duk.dukscoffee.security.filters.AccessDeniedHandlerImpl;
 import com.duk.dukscoffee.security.filters.AuthenticationEntryPoint;
 import com.duk.dukscoffee.security.filters.AuthenticationFilter;
@@ -32,11 +33,14 @@ public class SecurityConfig {
     @Autowired
     AuthenticationEntryPoint authenticationEntryPoint;
 
+    @Autowired
+    UserEntityRepository userEntityRepository;
+
     // SecurityFilterChain to configure security app.
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,  AuthenticationManager authenticationManager) throws Exception {
 
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter();
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(userEntityRepository);
         authenticationFilter.setAuthenticationManager(authenticationManager);
         authenticationFilter.setFilterProcessesUrl("/login");
 
