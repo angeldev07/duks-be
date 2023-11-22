@@ -1,15 +1,15 @@
 -- -------------------------------------------------------------------------------------------------------------------------
 -- Drop tables before
 
-DROP TABLE orders_x_products;
-DROP TABLE categories_products;
-DROP TABLE orders;
-DROP TABLE categories;
-DROP TABLE products;
-DROP TABLE stock;
-DROP TABLE bills;
-DROP TABLE users;
-DROP TABLE clients;
+DROP TABLE IF EXISTS orders_x_products;
+DROP TABLE IF EXISTS categories_products;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS stock;
+DROP TABLE IF EXISTS bills;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS clients;
 
 -- --------------------------------------------------------------------------------------------------------------------------
 
@@ -126,8 +126,8 @@ CREATE TABLE IF NOT EXISTS orders_x_products (
 -- Insert data in users table
 INSERT INTO users (first_name, last_name, email, password, rol)
 VALUES
-('John', 'Doe' , 'admin@example.com', 'admin123', 'ROLE_ADMIN'),
-('Janne', 'Doe' , 'jannedoe@example.com', 'janne123', 'ROLE_EMPLOYEE');
+('John', 'Doe' , 'admin@example.com', '$2a$10$1WKr48i17yaW47oNUXB6SOHfJURWMiwTYioyfSA46IMn8SDQPGgLa', 'ROLE_ADMIN'),
+('Janne', 'Doe' , 'jannedoe@example.com', '$2a$10$1WKr48i17yaW47oNUXB6SOHfJURWMiwTYioyfSA46IMn8SDQPGgLa', 'ROLE_EMPLOYEE');
 
 -- Insert data in clients table
 INSERT INTO clients (name, last_name, email, card_id, gender, birth_day, active, last_visit, address, phone)

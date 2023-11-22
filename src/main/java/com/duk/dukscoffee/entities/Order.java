@@ -26,19 +26,19 @@ public class Order {
     // Relation many to one with user table.
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JsonIgnore
     private UserEntity user;
 
     // Relation many to one  with client table.
     @ManyToOne
     @JoinColumn(name = "client_id")
-    @JsonBackReference
+    @JsonIgnore
     private Client client;
 
     // relation many to one with bill table
     @ManyToOne
     @JoinColumn(name = "bill_id")
-    @JsonBackReference
+    @JsonIgnore
     private Bill bill;
 
     // Relation many to many with products table.

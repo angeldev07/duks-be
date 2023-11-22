@@ -43,7 +43,7 @@ public class Product {
 
     // Relation many to many with Category table.
     @ManyToMany(mappedBy = "products")
-    @JsonIgnoreProperties("products")
+    @JsonIgnore
     private Set<Category> categories;
 
     // Relation many to many with orders table.

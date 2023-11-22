@@ -1,6 +1,7 @@
 package com.duk.dukscoffee.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,7 @@ public class UserEntity {
 
     // Relation one to many  with order table.
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Order> orders;
 
 

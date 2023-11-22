@@ -1,5 +1,6 @@
 package com.duk.dukscoffee.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,7 @@ public class Bill {
     private Date bill;
 
     @OneToMany(mappedBy =  "bill")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Order> order;
 
 
