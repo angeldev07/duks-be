@@ -77,6 +77,11 @@ public class ExceptionHandling {
         return createHttpResponse(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
+    @ExceptionHandler(ParameterNotAllowedException.class)
+    public ResponseEntity<HttpResponse> parameterNotAllowedException(ParameterNotAllowedException exception){
+        return createHttpResponse(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
+    }
+
  @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<HttpResponse> methodNotAllowedException (HttpRequestMethodNotSupportedException exception){
         HttpMethod supportedMethod = Objects.requireNonNull(exception.getSupportedHttpMethods()).iterator().next();

@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,6 +75,21 @@ public class ClientController extends ExceptionHandling {
         clientService.disableClient(clientId);
         return new ResponseEntity<>(
                 new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Client disabled successfully"),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/update/{clientId}")
+    public ResponseEntity<ClientDTO> updateClient(@PathVariable Integer clientId, @RequestBody ClientDTO clientDTO) throws ClientNotFoundException {
+        ClientDTO updatedClientDTO = clientService.updateClient(clientId, clientDTO);
+        return ResponseEntity.ok(updatedClientDTO);
+    }
+
+    @DeleteMapping("/delete/{clientId}")
+    public ResponseEntity<HttpResponse> deleteClient(@PathVariable Integer clientId) throws ClientNotFoundException {
+        clientService.deleteClient(clientId);
+        return new ResponseEntity<>(
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Client deleted successfully"),
                 HttpStatus.OK
         );
     }
