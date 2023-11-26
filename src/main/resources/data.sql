@@ -61,14 +61,15 @@ CREATE TABLE IF NOT EXISTS clients (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     last_name VARCHAR(255),
-    email VARCHAR(255) UNIQUE,
-    card_id VARCHAR(255) UNIQUE,
+    email VARCHAR(100) UNIQUE,
+    card_id VARCHAR(20) UNIQUE,
     gender CHAR(1),
     birth_day DATE,
     active BOOLEAN,
     last_visit DATE,
     address VARCHAR(255),
-    phone VARCHAR(255)
+    phone VARCHAR(255),
+    delete_flag BOOLEAN
 );
 
 -- Create User table.
@@ -130,10 +131,10 @@ VALUES
 ('Janne', 'Doe' , 'jannedoe@example.com', '$2a$10$1WKr48i17yaW47oNUXB6SOHfJURWMiwTYioyfSA46IMn8SDQPGgLa', 'ROLE_EMPLOYEE');
 
 -- Insert data in clients table
-INSERT INTO clients (name, last_name, email, card_id, gender, birth_day, active, last_visit, address, phone)
+INSERT INTO clients (name, last_name, email, card_id, gender, birth_day, active, last_visit, address, phone,delete_flag)
 VALUES
-('Juan', 'Perez', 'juan@example.com', 'ABC123', 'M', '1990-01-15', true, '2023-11-21', 'Calle 123', '123-456-7890'),
-('Maria', 'Gomez', 'maria@example.com', 'XYZ789', 'F', '1985-05-10', true, '2023-11-20', 'Avenida 456', '987-654-3210');
+('Juan', 'Perez', 'juan@example.com', 'ABC123', 'M', '1990-01-15', true, '2023-11-21', 'Calle 123', '123-456-7890',0),
+('Maria', 'Gomez', 'maria@example.com', 'XYZ789', 'F', '1985-05-10', true, '2023-11-20', 'Avenida 456', '987-654-3210',0);
 
 -- Insert data in stock table
 INSERT INTO stock (amount, stock, last_update)

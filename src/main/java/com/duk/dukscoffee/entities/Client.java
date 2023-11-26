@@ -1,7 +1,6 @@
 package com.duk.dukscoffee.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,6 +41,8 @@ public class Client {
     private String address;
 
     private String phone;
+
+    private boolean deleteFlag;
 
     // Relation one to many  with order table.
     @OneToMany(mappedBy = "client")

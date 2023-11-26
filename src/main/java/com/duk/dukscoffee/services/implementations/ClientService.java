@@ -131,7 +131,8 @@ public class ClientService implements IClientService {
         if (client == null) {
             throw new ClientNotFoundException(String.format(IS_NOT_FOUND, "client").toUpperCase());
         }
-        clientRepository.delete(client);
+        client.setDeleteFlag(true);
+        clientRepository.save(client);
     }
 
     @Override

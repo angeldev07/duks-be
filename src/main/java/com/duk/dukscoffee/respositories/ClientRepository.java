@@ -13,6 +13,9 @@ import java.util.Optional;
 
 public interface ClientRepository extends JpaRepository<Client, Integer> {
 
+    @Query("SELECT c FROM Client c WHERE c.deleteFlag = false")
+    List<Client> findAll();
+
     Optional<Client> findByCardId(String cardId);
 
     Optional<Client> findById(Integer id);
