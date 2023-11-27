@@ -29,7 +29,9 @@ CREATE TABLE IF NOT EXISTS products (
 -- Create category table.
 CREATE TABLE IF NOT EXISTS categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255)
+    name VARCHAR(255),
+    active BOOLEAN,
+    delete_flag BOOLEAN
 );
 
 -- Create Stock table.
@@ -149,10 +151,10 @@ VALUES
 ('Producto2', 39.99, 30, false, true, true, true, false, 2);
 
 -- Insert data in categories table
-INSERT INTO categories (name)
+INSERT INTO categories (name,active, delete_flag)
 VALUES
-('Electrónicos'),
-('Ropa');
+('Electrónicos',1 , 0),
+('Ropa', 1 ,0);
 
 -- Insert data in categories_products table
 INSERT INTO categories_products (product_id, category_id)

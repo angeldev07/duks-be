@@ -24,6 +24,8 @@ public class Category {
 
     private Boolean active;
 
+    private Boolean deleteFlag;
+
     // Relation many to many with product table.
     @ManyToMany
     @JoinTable(
