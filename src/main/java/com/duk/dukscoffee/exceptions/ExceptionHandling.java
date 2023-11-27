@@ -62,6 +62,11 @@ public class ExceptionHandling {
         return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
+    @ExceptionHandler(CategoryExistException.class)
+    public ResponseEntity<HttpResponse> categoryExistException(CategoryExistException exception){
+        return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
     @ExceptionHandler(ClientExistException.class)
     public ResponseEntity<HttpResponse> clientExistException(ClientExistException exception) {
         return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
@@ -75,6 +80,10 @@ public class ExceptionHandling {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<HttpResponse> userNotFoundException(UserNotFoundException exception) {
         return createHttpResponse(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<HttpResponse> categoryNotFoundException(CategoryNotFoundException exception){
+         return createHttpResponse(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
     @ExceptionHandler(ParameterNotAllowedException.class)
