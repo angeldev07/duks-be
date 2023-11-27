@@ -22,6 +22,8 @@ public class Category {
 
     private String name;
 
+    private Boolean active;
+
     // Relation many to many with product table.
     @ManyToMany
     @JoinTable(

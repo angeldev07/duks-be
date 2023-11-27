@@ -80,9 +80,12 @@ public class ClientController extends ExceptionHandling {
     }
 
     @PutMapping("/update/{clientId}")
-    public ResponseEntity<ClientDTO> updateClient(@PathVariable Integer clientId, @RequestBody ClientDTO clientDTO) throws ClientNotFoundException {
-        ClientDTO updatedClientDTO = clientService.updateClient(clientId, clientDTO);
-        return ResponseEntity.ok(updatedClientDTO);
+    public ResponseEntity<HttpResponse> updateClient(@PathVariable Integer clientId, @RequestBody ClientDTO clientDTO) throws ClientNotFoundException {
+        clientService.updateClient(clientId, clientDTO);
+        return new ResponseEntity<>(
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Client updated successfully"),
+                HttpStatus.OK
+        );
     }
 
     @DeleteMapping("/delete/{clientId}")

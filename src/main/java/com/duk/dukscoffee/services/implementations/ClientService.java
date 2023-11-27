@@ -183,9 +183,10 @@ public class ClientService implements IClientService {
     }
 
     private void validateGender(char gender) {
-        if (gender != 'M' && gender != 'F') {
-            throw new IllegalArgumentException(INVALID_GENDER);
+        if (gender == 'M' || gender == 'F') {
+            return;
         }
+        throw new IllegalArgumentException(INVALID_GENDER);
     }
     
      private List<Client> filterById(String id) {
