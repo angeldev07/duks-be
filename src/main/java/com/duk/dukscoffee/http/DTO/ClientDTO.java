@@ -2,7 +2,7 @@ package com.duk.dukscoffee.http.DTO;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

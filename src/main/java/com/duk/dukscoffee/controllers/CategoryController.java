@@ -16,16 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.MethodNotAllowedException;
 
-import com.duk.dukscoffee.exceptions.CardIdExistException;
+
 import com.duk.dukscoffee.exceptions.CategoryExistException;
 import com.duk.dukscoffee.exceptions.CategoryNotFoundException;
-import com.duk.dukscoffee.exceptions.ClientNotFoundException;
-import com.duk.dukscoffee.exceptions.EmailExistException;
 import com.duk.dukscoffee.exceptions.ExceptionHandling;
 import com.duk.dukscoffee.http.DTO.CategoryDTO;
-import com.duk.dukscoffee.http.DTO.ClientDTO;
 import com.duk.dukscoffee.http.response.HttpResponse;
 import com.duk.dukscoffee.services.implementations.CategoryService;
 
@@ -94,15 +90,7 @@ public class CategoryController extends ExceptionHandling {
        );
     }
 
-    // @PutMapping("/off")
-    // public ResponseEntity<HttpResponse> disableClient(@RequestParam Integer clientId) throws ClientNotFoundException, MethodNotAllowedException {
-    //     clientService.disableClient(clientId);
-    //     return new ResponseEntity<>(
-    //             new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Client disabled successfully"),
-    //             HttpStatus.OK
-    //     );
-    // }
-  
+    
 
 
 }

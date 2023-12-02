@@ -18,7 +18,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
@@ -66,6 +65,10 @@ public class ExceptionHandling {
     public ResponseEntity<HttpResponse> categoryExistException(CategoryExistException exception){
         return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
+    @ExceptionHandler(ProductExistException.class)
+    public ResponseEntity<HttpResponse> productExistException(ProductExistException exception){
+         return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
 
     @ExceptionHandler(ClientExistException.class)
     public ResponseEntity<HttpResponse> clientExistException(ClientExistException exception) {
@@ -79,6 +82,10 @@ public class ExceptionHandling {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<HttpResponse> userNotFoundException(UserNotFoundException exception) {
+        return createHttpResponse(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<HttpResponse> productNotFoundException (ProductNotFoundException exception){
         return createHttpResponse(HttpStatus.NOT_FOUND, exception.getMessage());
     }
     @ExceptionHandler(CategoryNotFoundException.class)

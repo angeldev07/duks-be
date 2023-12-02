@@ -1,6 +1,5 @@
 package com.duk.dukscoffee.entities;
 
-import com.fasterxml.jackson.databind.DatabindException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
