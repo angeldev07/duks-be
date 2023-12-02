@@ -3,9 +3,6 @@ package com.duk.dukscoffee.services.implementations;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +10,6 @@ import org.springframework.web.server.MethodNotAllowedException;
 
 import com.duk.dukscoffee.entities.Client;
 import com.duk.dukscoffee.exceptions.CardIdExistException;
-import com.duk.dukscoffee.exceptions.ClientExistException;
 import com.duk.dukscoffee.exceptions.ClientNotFoundException;
 import com.duk.dukscoffee.exceptions.EmailExistException;
 import com.duk.dukscoffee.exceptions.ParameterNotAllowedException;

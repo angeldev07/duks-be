@@ -12,9 +12,10 @@ import com.duk.dukscoffee.exceptions.CategoryExistException;
 import com.duk.dukscoffee.exceptions.CategoryNotFoundException;
 import com.duk.dukscoffee.http.DTO.CategoryDTO;
 import com.duk.dukscoffee.respositories.CategoryRepository;
+import com.duk.dukscoffee.services.interfaces.ICategoryService;
 
 @Service
-public class CategoryService {
+public class CategoryService implements ICategoryService {
     
     @Autowired
     private CategoryRepository categoryRepository;
@@ -22,6 +23,7 @@ public class CategoryService {
     public static final String IS_NOT_FOUND = "The %s is not found";
     public static final String IS_ALREADY_USE = "The %s is already use";
 
+    @Override
     public CategoryDTO createCategory(CategoryDTO categoryDTO) throws CategoryExistException{
 
         Category category = new Category();
@@ -35,6 +37,7 @@ public class CategoryService {
         return newCategoryDTO;
     }
 
+    @Override
     public CategoryDTO updateCategory(Integer categoryId, CategoryDTO categoryDTO) throws CategoryNotFoundException{
         Category category = categoryRepository.findById(categoryId).orElse(null);
         if(category == null){
@@ -47,10 +50,12 @@ public class CategoryService {
         return updateCategoryDTO;
     }
 
+    @Override
     public List<Category> getCategories(){
         return (List<Category>) categoryRepository.findAll();
     }
 
+    @Override
     public void deleteCategory(Integer categoryId) throws CategoryNotFoundException{
          Category category = categoryRepository.findById(categoryId).orElse(null);
         if(category == null){
@@ -62,6 +67,7 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
+    @Override
     public void enableCategory(Integer categoryId) throws CategoryNotFoundException{
         Category category = categoryRepository.findById(categoryId).orElse(null);
         if(category == null ) {
@@ -76,6 +82,7 @@ public class CategoryService {
        
     }
 
+    @Override
     public void disableCategory(Integer categoryId) throws CategoryNotFoundException{
         Category category = categoryRepository.findById(categoryId).orElse(null);
         if(category == null ) {
@@ -89,9 +96,6 @@ public class CategoryService {
         categoryRepository.save(category);
        
     }
-
-
-   
 
 
       /************************************** CLASS METHOD  *******************************************/
