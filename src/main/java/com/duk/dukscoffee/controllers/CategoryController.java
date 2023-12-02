@@ -32,22 +32,17 @@ import com.duk.dukscoffee.services.implementations.CategoryService;
 @RestController
 @RequestMapping("/categories")
 public class CategoryController extends ExceptionHandling {
-    
+
     @Autowired
     private CategoryService categoryService;
 
-     @PostMapping("/create")
-     public ResponseEntity<HttpResponse> createCategory(@RequestBody CategoryDTO categoryDTO) throws CategoryExistException{
-        categoryService.createCategory(categoryDTO);
-        return new ResponseEntity<>(
-                 new HttpResponse(HttpStatus.CREATED.value(), HttpStatus.CREATED, HttpStatus.CREATED.getReasonPhrase(), "Category created successfully"),
-                 HttpStatus.CREATED
-        );
+    @PostMapping("/create")
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO) throws CategoryExistException {
+        return ResponseEntity.ok(categoryService.createCategory(categoryDTO));
+    }
 
-     }
-
-     @PutMapping("/update/{categoryId}")
-    public ResponseEntity<HttpResponse> updateCategory(@PathVariable Integer categoryId, @RequestBody CategoryDTO categoryDTO) throws CategoryNotFoundException{
+    @PutMapping("/update/{categoryId}")
+    public ResponseEntity<HttpResponse> updateCategory(@PathVariable Integer categoryId, @RequestBody CategoryDTO categoryDTO) throws CategoryNotFoundException {
         categoryService.updateCategory(categoryId, categoryDTO);
 
         return new ResponseEntity<>(
@@ -57,41 +52,41 @@ public class CategoryController extends ExceptionHandling {
     }
 
     @DeleteMapping("/delete/{categoryId}")
-    public ResponseEntity<HttpResponse> deleteCategory(@PathVariable Integer categoryId)throws CategoryNotFoundException{
+    public ResponseEntity<HttpResponse> deleteCategory(@PathVariable Integer categoryId) throws CategoryNotFoundException {
         categoryService.deleteCategory(categoryId);
         return new ResponseEntity<>(
-            new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Category deleted successfully"),
-            HttpStatus.OK
-    );
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Category deleted successfully"),
+                HttpStatus.OK
+        );
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> getCategories(){
-          return ResponseEntity.ok(
-                 categoryService.getCategories().stream().map(category -> {
-                     CategoryDTO categoryDTO = new CategoryDTO();
-                     BeanUtils.copyProperties(category, categoryDTO);
-                     return categoryDTO;
-                 }).collect(Collectors.toList())
-         );
+    public ResponseEntity<List<CategoryDTO>> getCategories() {
+        return ResponseEntity.ok(
+                categoryService.getCategories().stream().map(category -> {
+                    CategoryDTO categoryDTO = new CategoryDTO();
+                    BeanUtils.copyProperties(category, categoryDTO);
+                    return categoryDTO;
+                }).collect(Collectors.toList())
+        );
     }
 
     @PutMapping("/on")
-    public ResponseEntity<HttpResponse> enableCategory(@RequestParam Integer categoryId) throws CategoryNotFoundException{
+    public ResponseEntity<HttpResponse> enableCategory(@RequestParam Integer categoryId) throws CategoryNotFoundException {
         categoryService.enableCategory(categoryId);
         return new ResponseEntity<>(
-                 new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Category enabled successfully"),
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Category enabled successfully"),
                 HttpStatus.OK
-       );
+        );
     }
-   
-     @PutMapping("/off")
-    public ResponseEntity<HttpResponse> disableCategory(@RequestParam Integer categoryId) throws CategoryNotFoundException{
+
+    @PutMapping("/off")
+    public ResponseEntity<HttpResponse> disableCategory(@RequestParam Integer categoryId) throws CategoryNotFoundException {
         categoryService.disableCategory(categoryId);
         return new ResponseEntity<>(
-                 new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Category disabled successfully"),
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Category disabled successfully"),
                 HttpStatus.OK
-       );
+        );
     }
 
     // @PutMapping("/off")
@@ -102,7 +97,6 @@ public class CategoryController extends ExceptionHandling {
     //             HttpStatus.OK
     //     );
     // }
-  
 
 
 }

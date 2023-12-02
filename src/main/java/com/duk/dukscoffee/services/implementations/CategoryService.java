@@ -24,10 +24,10 @@ public class CategoryService {
 
     public CategoryDTO createCategory(CategoryDTO categoryDTO) throws CategoryExistException{
 
-        ifCategoryExist(categoryDTO.getName());
         Category category = new Category();
         category.setName(categoryDTO.getName());
-        category.setActive(true);
+        category.setActive(categoryDTO.getActive());
+        category.setDeleteFlag(false);
         Category newCategory = categoryRepository.save(category);
         CategoryDTO newCategoryDTO = new CategoryDTO();
         BeanUtils.copyProperties(newCategory, newCategoryDTO);
@@ -57,7 +57,9 @@ public class CategoryService {
             throw new CategoryNotFoundException(String.format(IS_NOT_FOUND, "category").toUpperCase()); 
         }
 
-        categoryRepository.delete(category);
+        category.setDeleteFlag(true);
+
+        categoryRepository.save(category);
     }
 
     public void enableCategory(Integer categoryId) throws CategoryNotFoundException{
