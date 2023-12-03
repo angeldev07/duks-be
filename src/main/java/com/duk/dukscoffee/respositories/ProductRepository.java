@@ -23,4 +23,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("SELECT p FROM Product p WHERE p.category = NULL")
     List<Product> findByNoCategory();
+
+    @Query("SELECT p from Product p where p.deleteFlag = false")
+     List<Product> findAll();
+       
 }

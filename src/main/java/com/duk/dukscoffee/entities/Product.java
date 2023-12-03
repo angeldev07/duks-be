@@ -53,5 +53,5 @@ public class Product {
     @JsonIgnore
     private List<OrderXProduct> productOrderList;
 
-
+    private boolean deleteFlag;
 }

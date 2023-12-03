@@ -14,5 +14,6 @@ public interface IProductService {
      public ProductDTO getProductDetails(Integer productId)throws ProductNotFoundException;
 
      public StatsProductsDTO getStats();
+     public void deleteProduct(Integer productId) throws ProductNotFoundException;
 
 }
