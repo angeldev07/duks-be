@@ -2,10 +2,9 @@
 -- Drop tables before
 
 DROP TABLE IF EXISTS orders_x_products;
-DROP TABLE IF EXISTS categories_products;
 DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS stock;
 DROP TABLE IF EXISTS bills;
 DROP TABLE IF EXISTS users;
@@ -23,7 +22,8 @@ CREATE TABLE IF NOT EXISTS products (
     active BOOLEAN,
     sell BOOLEAN,
     available BOOLEAN,
-    deleted BOOLEAN
+    deleted BOOLEAN,
+    profile_img TEXT
 );
 
 -- Create category table.
@@ -91,8 +91,9 @@ CREATE TABLE IF NOT EXISTS users (
 -- FOREIGN KEY product with stock.
 ALTER TABLE products
     ADD COLUMN stock_id INT NOT NULL,
-    ADD CONSTRAINT fk_stock_id FOREIGN KEY (stock_id)
-    REFERENCES stock (id);
+    ADD CONSTRAINT fk_stock_id FOREIGN KEY (stock_id) REFERENCES stock (id),
+    ADD COLUMN category_id INT,
+    ADD CONSTRAINT fk_category_id FOREIGN KEY (category_id) REFERENCES categories (id);
 
 -- FOREIGN KEY order with users, bill and client.
 ALTER TABLE orders
@@ -104,15 +105,6 @@ ALTER TABLE orders
     ADD CONSTRAINT fk_bill_id FOREIGN KEY (bill_id) REFERENCES bills (id);
 
 -- ------------------------------------------------------------------------------------------------------------------------------
-
-------------------------------- Create Tables Many to MANY  -------------------------------------
-CREATE TABLE IF NOT EXISTS categories_products (
-   product_id INT,
-   category_id INT,
-   PRIMARY KEY (product_id, category_id),
-   FOREIGN KEY (product_id) REFERENCES products(id),
-   FOREIGN KEY (category_id) REFERENCES categories(id)
-);
 
 CREATE TABLE IF NOT EXISTS orders_x_products (
    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -144,23 +136,17 @@ VALUES
 (100, 80, '2023-11-21'),
 (150, 120, '2023-11-20');
 
--- Insert data in products table
-INSERT INTO products (name, base_price, amount, low_stock, active, sell, available, deleted, stock_id)
-VALUES
-('Producto1', 29.99, 50, false, true, true, true, false, 1),
-('Producto2', 39.99, 30, false, true, true, true, false, 2);
-
 -- Insert data in categories table
 INSERT INTO categories (name,active, delete_flag)
 VALUES
-('Electrónicos',1 , 0),
-('Ropa', 1 ,0);
+    ('Electrónicos',1 , 0),
+    ('Ropa', 1 ,0);
 
--- Insert data in categories_products table
-INSERT INTO categories_products (product_id, category_id)
+-- Insert data in products table
+INSERT INTO products (name, base_price, amount, low_stock, active, sell, available, deleted, stock_id, category_id)
 VALUES
-(1, 1),
-(2, 2);
+('Producto1', 29.99, 50, false, true, true, true, false, 1,1),
+('Producto2', 39.99, 30, false, true, true, true, false, 2,NULL);
 
 -- Insert data in bills table
 INSERT INTO bills (base_price, iva, total_price, discounts, bill)

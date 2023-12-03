@@ -3,6 +3,7 @@ package com.duk.dukscoffee.services.implementations;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.duk.dukscoffee.http.DTO.CategoryDTO;
 import com.duk.dukscoffee.http.DTO.StatsProductsDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +29,6 @@ public class ProductService implements IProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    // public ProductDTO createProduct(ProductDTO productDTO) throws
-    // ProductExistException{
-    // Product product = new Product();
-    // BeanUtils.copyProperties(productDTO, product);
-
-    // return null;
-    // }
     @Override
     public List<Product> getProducts() {
         return (List<Product>) productRepository.findAll();
@@ -63,6 +57,7 @@ public class ProductService implements IProductService {
         return productRepository.findByNoCategory().stream().map(product -> {
             ProductDTO productDTO = new ProductDTO();
             BeanUtils.copyProperties(product, productDTO);
+            productDTO.setCategory(null);
             return  productDTO;
         }).collect(Collectors.toList());
     }
@@ -70,7 +65,10 @@ public class ProductService implements IProductService {
     public List<ProductDTO> getProductsDeactivate() {
         return productRepository.findByActive().stream().map(product -> {
             ProductDTO productDTO = new ProductDTO();
+            CategoryDTO categoryDTO = new CategoryDTO();
             BeanUtils.copyProperties(product, productDTO);
+            BeanUtils.copyProperties(product.getCategory(), categoryDTO);
+            productDTO.setCategory(categoryDTO);
             return  productDTO;
         }).collect(Collectors.toList());
     }
@@ -78,7 +76,10 @@ public class ProductService implements IProductService {
     public List<ProductDTO> getProductsLowStock() {
         return productRepository.findByLowStock().stream().map(product -> {
             ProductDTO productDTO = new ProductDTO();
+            CategoryDTO categoryDTO = new CategoryDTO();
             BeanUtils.copyProperties(product, productDTO);
+            BeanUtils.copyProperties(product.getCategory(), categoryDTO);
+            productDTO.setCategory(categoryDTO);
             return  productDTO;
         }).collect(Collectors.toList());
     }

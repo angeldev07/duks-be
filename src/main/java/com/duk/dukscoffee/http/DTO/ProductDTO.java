@@ -15,11 +15,18 @@ import java.util.Set;
 @Builder
 public class ProductDTO {
 
+    private String profileImg;
+
+    private Integer id;
 
     private String name;
 
     private Double basePrice;
 
     private Integer amount;
+
+    private boolean active;
+
+    private CategoryDTO category;
 
 }

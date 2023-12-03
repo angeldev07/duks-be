@@ -40,10 +40,13 @@ public class Product {
 
     private boolean deleted;
 
+    private String profileImg;
+
     // Relation many to many with Category table.
-    @ManyToMany(mappedBy = "products")
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     @JsonIgnore
-    private Set<Category> categories;
+    private Category category;
 
     // Relation many to many with orders table.
     @OneToMany(mappedBy = "product")

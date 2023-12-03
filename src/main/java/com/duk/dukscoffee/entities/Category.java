@@ -26,12 +26,7 @@ public class Category {
     private Boolean deleteFlag;
 
     // Relation many to many with product table.
-    @ManyToMany
-    @JoinTable(
-            name = "categories_products",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
+    @OneToMany(mappedBy = "category")
     @JsonIgnore
     private Set<Product> products;
 
