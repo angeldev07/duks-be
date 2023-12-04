@@ -20,7 +20,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "stock_id", referencedColumnName = "id")
     private Stock stock;
 
@@ -38,8 +38,7 @@ public class Product {
 
     private boolean available;
 
-    private boolean deleted;
-
+    @Column(columnDefinition = "LONGTEXT")
     private String profileImg;
 
     // Relation many to many with Category table.

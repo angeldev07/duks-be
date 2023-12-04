@@ -3,6 +3,7 @@ package com.duk.dukscoffee.controllers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.duk.dukscoffee.http.DTO.CategoryDTO;
 import com.duk.dukscoffee.http.DTO.StatsProductsDTO;
 import com.duk.dukscoffee.http.response.HttpResponse;
 
@@ -10,13 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.duk.dukscoffee.exceptions.ClientNotFoundException;
 import com.duk.dukscoffee.exceptions.ProductNotFoundException;
@@ -35,7 +30,12 @@ public class ProductController {
         return ResponseEntity.ok(
                   productService.getProducts().stream().map(product -> {
                       ProductDTO productDTO = new ProductDTO();
+                      CategoryDTO categoryDTO = new CategoryDTO();
                       BeanUtils.copyProperties(product, productDTO);
+                      if(product.getCategory() != null) {
+                          BeanUtils.copyProperties(product.getCategory(), categoryDTO);
+                          productDTO.setCategory(categoryDTO);
+                      }
                       return productDTO;
                   }).collect(Collectors.toList())
           );
@@ -58,6 +58,11 @@ public class ProductController {
         return new ResponseEntity<>( new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Product deleted successfully"),
                  HttpStatus.OK
          );
+    }
+
+    @PostMapping("/create")
+    public ProductDTO createProduct(@RequestBody ProductDTO productDTO) {
+        return productService.createProduct(productDTO);
     }
 
 

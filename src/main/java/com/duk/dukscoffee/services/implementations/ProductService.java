@@ -1,13 +1,17 @@
 package com.duk.dukscoffee.services.implementations;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.duk.dukscoffee.entities.Stock;
 import com.duk.dukscoffee.http.DTO.CategoryDTO;
 import com.duk.dukscoffee.http.DTO.StatsProductsDTO;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.server.MethodNotAllowedException;
 
 import com.duk.dukscoffee.entities.Category;
@@ -25,8 +29,24 @@ public class ProductService implements IProductService {
     public static final String IS_NOT_FOUND = "The %s is not found";
     public static final String IS_NOT_ALLOWED = "The %s is not allowed";
 
+    private ModelMapper modelMapper = new ModelMapper();
+
     @Autowired
     private ProductRepository productRepository;
+
+    @Override
+    public ProductDTO createProduct(ProductDTO productDTO) {
+        Stock defaultStock = new Stock().builder()
+                .stock(1)
+                .amount(1)
+                .lastUpdate(new Date())
+                .build();
+        Product product = modelMapper.map(productDTO, Product.class);
+        product.setCategory((Category) modelMapper.map(productDTO.getCategory(), Category.class));
+        product.setStock(defaultStock);
+        productRepository.save(product);
+        return (ProductDTO) modelMapper.map(product, ProductDTO.class);
+    }
 
     @Override
     public List<Product> getProducts() {

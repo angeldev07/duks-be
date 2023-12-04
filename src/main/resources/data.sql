@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS products (
     active BOOLEAN,
     sell BOOLEAN,
     available BOOLEAN,
-    deleted BOOLEAN,
-    profile_img TEXT
+    profile_img LONGTEXT,
+    delete_flag BOOLEAN
 );
 
 -- Create category table.
@@ -143,7 +143,7 @@ VALUES
     ('Ropa', 1 ,0);
 
 -- Insert data in products table
-INSERT INTO products (name, base_price, amount, low_stock, active, sell, available, deleted, stock_id, category_id)
+INSERT INTO products (name, base_price, amount, low_stock, active, sell, available, delete_flag, stock_id, category_id)
 VALUES
 ('Producto1', 29.99, 50, false, true, true, true, false, 1,1),
 ('Producto2', 39.99, 30, false, true, true, true, false, 2,NULL);
