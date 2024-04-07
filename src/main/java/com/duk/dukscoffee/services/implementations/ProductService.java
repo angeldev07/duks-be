@@ -133,6 +133,7 @@ public class ProductService implements IProductService {
         product.setName(productDTO.getName());
         product.setBasePrice(productDTO.getBasePrice());
         product.setAmount(productDTO.getAmount());
+        product.setCategory((Category) modelMapper.map(productDTO.getCategory(), Category.class));
 
         if (productDTO.getProfileImg() != null) {
             product.setProfileImg(productDTO.getProfileImg());

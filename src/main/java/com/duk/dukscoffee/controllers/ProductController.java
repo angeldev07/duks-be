@@ -65,5 +65,13 @@ public class ProductController {
         return productService.createProduct(productDTO);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<HttpResponse>updateProduct(@RequestBody ProductDTO productDTO) throws ProductNotFoundException {
+        productService.updateProduct(productDTO.getId(), productDTO);
+        return new ResponseEntity<>( new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Product updated successfully"),
+        HttpStatus.OK
+);
+    }
+
 
 }

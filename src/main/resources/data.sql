@@ -139,14 +139,14 @@ VALUES
 -- Insert data in categories table
 INSERT INTO categories (name,active, delete_flag)
 VALUES
-    ('Electrónicos',1 , 0),
-    ('Ropa', 1 ,0);
+    ('Bebidas',1 , 0),
+    ('Cafes', 1 ,0);
 
 -- Insert data in products table
 INSERT INTO products (name, base_price, amount, low_stock, active, sell, available, delete_flag, stock_id, category_id)
 VALUES
-('Producto1', 29.99, 50, false, true, true, true, false, 1,1),
-('Producto2', 39.99, 30, false, true, true, true, false, 2,NULL);
+('Cafe con leche', 29.99, 50, false, true, true, true, false, 1,1),
+('Capucchino', 39.99, 30, false, true, true, true, false, 2,1);
 
 -- Insert data in bills table
 INSERT INTO bills (base_price, iva, total_price, discounts, bill)
