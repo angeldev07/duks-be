@@ -60,6 +60,15 @@ public class CategoryController extends ExceptionHandling {
         );
     }
 
+    @DeleteMapping("/delete/batches")
+    public ResponseEntity<HttpResponse>deleteCategoryByBatches(@RequestParam List<Integer> categoriesId){
+        categoryService.deleteCategoriesByBatches(categoriesId);
+        return new ResponseEntity<>(
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Categories deleted successfully"),
+                HttpStatus.OK
+        );
+    }
+
     @GetMapping
     public ResponseEntity<List<CategoryDTO>> getCategories() {
         return ResponseEntity.ok(
@@ -88,5 +97,7 @@ public class CategoryController extends ExceptionHandling {
                 HttpStatus.OK
         );
     }
+
+    
 
 }

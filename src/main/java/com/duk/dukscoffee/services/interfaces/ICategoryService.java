@@ -14,5 +14,6 @@ public interface ICategoryService {
     public void deleteCategory(Integer categoryId) throws CategoryNotFoundException;
     public void enableCategory(Integer categoryId) throws CategoryNotFoundException;
     public void disableCategory(Integer categoryId) throws CategoryNotFoundException;
+    public void deleteCategoriesByBatches(List<Integer> categoriesId);
 
 }

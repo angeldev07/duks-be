@@ -7,8 +7,8 @@ spring:
       mode: always
   datasource:
     url: jdbc:mysql://localhost:3306/duks-coffee
-    username:
-    password:
+    username: root
+    password: 1234
   jpa:
     show-sql: true
     hibernate:

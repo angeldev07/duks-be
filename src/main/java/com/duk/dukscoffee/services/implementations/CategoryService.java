@@ -28,7 +28,7 @@ public class CategoryService implements ICategoryService {
 
         Category category = new Category();
         category.setName(categoryDTO.getName());
-        category.setActive(categoryDTO.getActive());
+        category.setActive(true);
         category.setDeleteFlag(false);
         Category newCategory = categoryRepository.save(category);
         CategoryDTO newCategoryDTO = new CategoryDTO();
@@ -65,6 +65,14 @@ public class CategoryService implements ICategoryService {
         category.setDeleteFlag(true);
 
         categoryRepository.save(category);
+    }
+    @Override
+    public void deleteCategoriesByBatches(List<Integer> categoriesId){
+        List<Category> categories = categoryRepository.findAllById(categoriesId);
+        for (Category category : categories) {
+            category.setDeleteFlag(true);
+        }
+        categoryRepository.saveAll(categories);
     }
 
     @Override

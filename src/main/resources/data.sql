@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS bills (
     iva BOOLEAN,
     total_price DOUBLE,
     discounts DOUBLE,
-    bill DATE
+    date_bill DATE
 );
 
 -- Create Client table.
@@ -109,10 +109,10 @@ ALTER TABLE orders
 CREATE TABLE IF NOT EXISTS orders_x_products (
    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
    product_id INT,
-   category_id INT,
+   order_id INT,
    amount INT,
    FOREIGN KEY (product_id) REFERENCES products(id),
-   FOREIGN KEY (category_id) REFERENCES categories(id)
+   FOREIGN KEY (order_id) REFERENCES orders(id)
 );
 
 -- ----------------------------------------------------------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ VALUES
 ('Capucchino', 39.99, 30, false, true, true, true, false, 2,1);
 
 -- Insert data in bills table
-INSERT INTO bills (base_price, iva, total_price, discounts, bill)
+INSERT INTO bills (base_price, iva, total_price, discounts, date_bill)
 VALUES
 (100.00, true, 120.00, 10.00, '2023-11-21'),
 (150.00, false, 150.00, 0.00, '2023-11-20');
@@ -161,7 +161,7 @@ VALUES
 ('2023-11-20', 2, 2, 2);
 
 -- Insert data in orders_x_products table
-INSERT INTO orders_x_products (product_id, category_id, amount)
+INSERT INTO orders_x_products (product_id, order_id, amount)
 VALUES
 (1, 1, 5),
 (2, 2, 3);

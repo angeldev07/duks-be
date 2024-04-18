@@ -126,6 +126,15 @@ public class ProductService implements IProductService {
 
     }
 
+    @Override
+    public void deleteProductsByBatches(List<Integer> productsId) {
+        List<Product> products = productRepository.findAllById(productsId);
+        for (Product product : products) {
+            product.setDeleteFlag(true);
+        }
+        productRepository.saveAll(products);
+    }
+
     public ProductDTO updateProduct(Integer productId, ProductDTO productDTO) throws ProductNotFoundException {
         Product product = productRepository.findById(productId).orElse(null);
         if (product == null)
@@ -145,7 +154,5 @@ public class ProductService implements IProductService {
         BeanUtils.copyProperties(updatedProduct, updatedProductDTO);
         return updatedProductDTO;
     }
-    // ---------------------------------------CLASS
-    // METHOD------------------------------------
-
+    
 }
