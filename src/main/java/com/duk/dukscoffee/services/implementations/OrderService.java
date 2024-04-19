@@ -76,6 +76,16 @@ public class OrderService implements IOrderService  {
         BeanUtils.copyProperties(order, createdOrderDTO);
         return createdOrderDTO;
     }
+    
+    @Override
+    public List<Order> getOrders(){
+        return (List<Order>) orderRepository.findAll();
+
+    }
+
+    public Order findOrderById(Integer orderId){
+        return null;
+    }
 
     private Bill createBill(List<OrderXProductDTO> orderXProductDTOs) {
         
