@@ -21,6 +21,8 @@ public class ProductDTO {
 
     private String name;
 
+    private Double discount;
+    
     private Double basePrice;
 
     private Integer amount;

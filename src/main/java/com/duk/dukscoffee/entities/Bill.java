@@ -28,7 +28,7 @@ public class Bill {
 
     private Double discounts;
 
-    private Date bill;
+    private Date dateBill;
 
     @OneToMany(mappedBy =  "bill")
     @JsonIgnore
