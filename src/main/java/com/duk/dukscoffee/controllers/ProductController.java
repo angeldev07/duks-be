@@ -21,44 +21,56 @@ import com.duk.dukscoffee.services.implementations.ProductService;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    
+
     @Autowired
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getProducts(){
+    public ResponseEntity<List<ProductDTO>> getProducts() {
         return ResponseEntity.ok(
-                  productService.getProducts().stream().map(product -> {
-                      ProductDTO productDTO = new ProductDTO();
-                      CategoryDTO categoryDTO = new CategoryDTO();
-                      BeanUtils.copyProperties(product, productDTO);
-                      if(product.getCategory() != null) {
-                          BeanUtils.copyProperties(product.getCategory(), categoryDTO);
-                          productDTO.setCategory(categoryDTO);
-                      }
-                      return productDTO;
-                  }).collect(Collectors.toList())
-          );
+                productService.getProducts().stream().map(product -> {
+                    ProductDTO productDTO = new ProductDTO();
+                    CategoryDTO categoryDTO = new CategoryDTO();
+                    BeanUtils.copyProperties(product, productDTO);
+                    if (product.getCategory() != null) {
+                        BeanUtils.copyProperties(product.getCategory(), categoryDTO);
+                        productDTO.setCategory(categoryDTO);
+                    }
+                    return productDTO;
+                }).collect(Collectors.toList()));
     }
+
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductDTO> getProductDetails(@PathVariable Integer productId) throws ProductNotFoundException{
+    public ResponseEntity<ProductDTO> getProductDetails(@PathVariable Integer productId)
+            throws ProductNotFoundException {
         ProductDTO product = new ProductDTO();
         BeanUtils.copyProperties(productService.getProductDetails(productId), product);
         return ResponseEntity.ok(product);
     }
 
     @GetMapping("/stats")
-    public StatsProductsDTO getProductsWithoutCategories(){
+    public StatsProductsDTO getProductsWithoutCategories() {
         return productService.getStats();
     }
 
     @DeleteMapping("/delete/{productId}")
-    public ResponseEntity<HttpResponse> deleteProduct(@PathVariable Integer productId) throws ProductNotFoundException{
+    public ResponseEntity<HttpResponse> deleteProduct(@PathVariable Integer productId) throws ProductNotFoundException {
         productService.deleteProduct(productId);
-        return new ResponseEntity<>( new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Product deleted successfully"),
-                 HttpStatus.OK
-         );
+        return new ResponseEntity<>(
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(),
+                        "Product deleted successfully"),
+                HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<HttpResponse> deleteProductsByBatches(@RequestParam List<Integer> productsId) {
+        productService.deleteProductsByBatches(productsId);
+        return new ResponseEntity<>(
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(),
+                        "Products deleted successfully"),
+                HttpStatus.OK);
+    }
+
 
     @PostMapping("/create")
     public ProductDTO createProduct(@RequestBody ProductDTO productDTO) {
@@ -66,12 +78,13 @@ public class ProductController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<HttpResponse>updateProduct(@RequestBody ProductDTO productDTO) throws ProductNotFoundException {
+    public ResponseEntity<HttpResponse> updateProduct(@RequestBody ProductDTO productDTO)
+            throws ProductNotFoundException {
         productService.updateProduct(productDTO.getId(), productDTO);
-        return new ResponseEntity<>( new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Product updated successfully"),
-        HttpStatus.OK
-);
+        return new ResponseEntity<>(
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(),
+                        "Product updated successfully"),
+                HttpStatus.OK);
     }
-
 
 }

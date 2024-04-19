@@ -60,7 +60,7 @@ public class CategoryController extends ExceptionHandling {
         );
     }
 
-    @DeleteMapping("/delete/batches")
+    @DeleteMapping("/delete")
     public ResponseEntity<HttpResponse>deleteCategoryByBatches(@RequestParam List<Integer> categoriesId){
         categoryService.deleteCategoriesByBatches(categoriesId);
         return new ResponseEntity<>(

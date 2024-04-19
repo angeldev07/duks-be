@@ -2,8 +2,10 @@ package com.duk.dukscoffee.services.implementations;
 
 import com.duk.dukscoffee.entities.*;
 import com.duk.dukscoffee.exceptions.ClientNotFoundException;
+import com.duk.dukscoffee.exceptions.OrderNotFoundException;
 import com.duk.dukscoffee.exceptions.UserNotFoundException;
 import com.duk.dukscoffee.http.DTO.OrderDTO;
+import com.duk.dukscoffee.http.DTO.OrderDetailsDTO;
 import com.duk.dukscoffee.http.DTO.OrderXProductDTO;
 import com.duk.dukscoffee.respositories.BillRepository;
 import com.duk.dukscoffee.respositories.ClientRepository;
@@ -75,6 +77,25 @@ public class OrderService implements IOrderService  {
         OrderDTO createdOrderDTO = new OrderDTO();
         BeanUtils.copyProperties(order, createdOrderDTO);
         return createdOrderDTO;
+    }
+    
+    @Override
+    public List<Order> getOrders(){
+        return (List<Order>) orderRepository.findAll();
+
+    }
+
+    @Override
+    public OrderDetailsDTO getOrderById(Integer orderId) throws OrderNotFoundException {
+        Order order = orderRepository.findById(orderId).orElse(null);
+
+        if (order == null){
+            throw new OrderNotFoundException(String.format(IS_NOT_FOUND, "order").toUpperCase());
+        }
+
+        OrderDetailsDTO OrderResponseDTO = new OrderDetailsDTO();
+        BeanUtils.copyProperties(order, OrderResponseDTO);
+        return OrderResponseDTO;
     }
 
     private Bill createBill(List<OrderXProductDTO> orderXProductDTOs) {

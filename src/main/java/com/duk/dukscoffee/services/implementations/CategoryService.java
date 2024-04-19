@@ -28,7 +28,6 @@ public class CategoryService implements ICategoryService {
 
         Category category = new Category();
         category.setName(categoryDTO.getName());
-        category.setActive(true);
         category.setDeleteFlag(false);
         Category newCategory = categoryRepository.save(category);
         CategoryDTO newCategoryDTO = new CategoryDTO();
@@ -106,17 +105,6 @@ public class CategoryService implements ICategoryService {
     }
 
 
-      /************************************** CLASS METHOD  *******************************************/
-
-      private void ifCategoryExist(String nameCategory) throws CategoryExistException{
-        Category category = categoryRepository.findByName(nameCategory).orElse(null);
-        if(category == null) return;
-
-        if (category.getName().equalsIgnoreCase(nameCategory)) {
-             throw new CategoryExistException (String.format(IS_ALREADY_USE, "email").toUpperCase());
-        }
-
-      }
 
 
 }

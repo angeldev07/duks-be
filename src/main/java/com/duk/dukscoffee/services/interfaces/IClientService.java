@@ -18,6 +18,7 @@ public interface IClientService {
     public void enableClient(Integer clientId) throws ClientNotFoundException;
     public ClientDTO updateClient(Integer clientId, ClientDTO clientDTO) throws ClientNotFoundException;
     public void deleteClient(Integer clientId) throws ClientNotFoundException;
+    public void deleteClientsByBatches (List<Integer> clientsId);
     public List<Client> filterClients(String attributeName, String attributeValue) throws ParameterNotAllowedException;
     
 
