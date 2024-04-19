@@ -28,6 +28,8 @@ public class Product {
 
     private Double basePrice;
 
+    private Double discount;
+
     private Integer amount;
 
     private boolean lowStock;
