@@ -14,7 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AllOrdersDTO {
+public class OrderDetailsDTO {
     
     private Integer id;
 
