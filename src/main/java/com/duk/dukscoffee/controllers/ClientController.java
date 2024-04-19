@@ -33,17 +33,19 @@ public class ClientController extends ExceptionHandling {
     private ClientService clientService;
 
     @PostMapping("/create")
-    public ResponseEntity<HttpResponse> createClient(@RequestBody ClientDTO clientDTO) throws EmailExistException, CardIdExistException {
+    public ResponseEntity<HttpResponse> createClient(@RequestBody ClientDTO clientDTO)
+            throws EmailExistException, CardIdExistException {
         clientService.createClient(clientDTO);
 
         return new ResponseEntity<>(
-                new HttpResponse(HttpStatus.CREATED.value(), HttpStatus.CREATED, HttpStatus.CREATED.getReasonPhrase(), "Client created successfully"),
-                HttpStatus.CREATED
-        );
+                new HttpResponse(HttpStatus.CREATED.value(), HttpStatus.CREATED, HttpStatus.CREATED.getReasonPhrase(),
+                        "Client created successfully"),
+                HttpStatus.CREATED);
     }
 
     @GetMapping("/{clientId}")
-    public ResponseEntity<ClientDTO> getClientInfoDetails(@PathVariable Integer clientId) throws ClientNotFoundException {
+    public ResponseEntity<ClientDTO> getClientInfoDetails(@PathVariable Integer clientId)
+            throws ClientNotFoundException {
         ClientDTO client = new ClientDTO();
         BeanUtils.copyProperties(clientService.getClientInfoDetails(clientId), client);
 
@@ -57,43 +59,55 @@ public class ClientController extends ExceptionHandling {
                     ClientDTO clientDTO = new ClientDTO();
                     BeanUtils.copyProperties(client, clientDTO);
                     return clientDTO;
-                }).collect(Collectors.toList())
-        );
+                }).collect(Collectors.toList()));
     }
 
     @PutMapping("/on")
-    public ResponseEntity<HttpResponse> enableClient(@RequestParam Integer clientId) throws ClientNotFoundException, MethodNotAllowedException {
+    public ResponseEntity<HttpResponse> enableClient(@RequestParam Integer clientId)
+            throws ClientNotFoundException, MethodNotAllowedException {
         clientService.enableClient(clientId);
         return new ResponseEntity<>(
-                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Client enabled successfully"),
-                HttpStatus.OK
-        );
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(),
+                        "Client enabled successfully"),
+                HttpStatus.OK);
     }
 
     @PutMapping("/off")
-    public ResponseEntity<HttpResponse> disableClient(@RequestParam Integer clientId) throws ClientNotFoundException, MethodNotAllowedException {
+    public ResponseEntity<HttpResponse> disableClient(@RequestParam Integer clientId)
+            throws ClientNotFoundException, MethodNotAllowedException {
         clientService.disableClient(clientId);
         return new ResponseEntity<>(
-                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Client disabled successfully"),
-                HttpStatus.OK
-        );
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(),
+                        "Client disabled successfully"),
+                HttpStatus.OK);
     }
 
     @PutMapping("/update/{clientId}")
-    public ResponseEntity<HttpResponse> updateClient(@PathVariable Integer clientId, @RequestBody ClientDTO clientDTO) throws ClientNotFoundException {
+    public ResponseEntity<HttpResponse> updateClient(@PathVariable Integer clientId, @RequestBody ClientDTO clientDTO)
+            throws ClientNotFoundException {
         clientService.updateClient(clientId, clientDTO);
         return new ResponseEntity<>(
-                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Client updated successfully"),
-                HttpStatus.OK
-        );
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(),
+                        "Client updated successfully"),
+                HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{clientId}")
     public ResponseEntity<HttpResponse> deleteClient(@PathVariable Integer clientId) throws ClientNotFoundException {
         clientService.deleteClient(clientId);
         return new ResponseEntity<>(
-                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Client deleted successfully"),
-                HttpStatus.OK
-        );
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(),
+                        "Client deleted successfully"),
+                HttpStatus.OK);
+    }
+
+    
+    @DeleteMapping("/delete")
+    public ResponseEntity<HttpResponse> deleteClientsByBatches(@RequestParam List<Integer> clientsId) {
+        clientService.deleteClientsByBatches(clientsId);
+        return new ResponseEntity<>(
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(),
+                        "Clients deleted successfully"),
+                HttpStatus.OK);
     }
 }

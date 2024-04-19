@@ -130,7 +130,15 @@ public class ClientService implements IClientService {
         client.setDeleteFlag(true);
         clientRepository.save(client);
     }
-
+    @Override
+    public void deleteClientsByBatches (List<Integer> clientsId){
+        List<Client> clients = clientRepository.findAllById(clientsId);
+        for (Client client : clients){
+            client.setDeleteFlag(true);
+        }
+        clientRepository.saveAll(clients);
+    }
+      
     @Override
     public List<Client> filterClients(String attributeName, String attributeValue) throws ParameterNotAllowedException {
         List<Client> filteredClients = null;
