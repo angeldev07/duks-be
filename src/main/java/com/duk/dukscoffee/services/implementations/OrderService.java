@@ -7,6 +7,10 @@ import com.duk.dukscoffee.exceptions.UserNotFoundException;
 import com.duk.dukscoffee.http.DTO.OrderDTO;
 import com.duk.dukscoffee.http.DTO.OrderDetailsDTO;
 import com.duk.dukscoffee.http.DTO.OrderXProductDTO;
+import com.duk.dukscoffee.http.DTO.OrderXProductDetailsDTO;
+import com.duk.dukscoffee.http.DTO.ProductBillDTO;
+import com.duk.dukscoffee.http.DTO.ProductDTO;
+import com.duk.dukscoffee.http.DTO.UserDTO;
 import com.duk.dukscoffee.respositories.BillRepository;
 import com.duk.dukscoffee.respositories.ClientRepository;
 import com.duk.dukscoffee.respositories.OrderRepository;
@@ -20,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 @Service
 public class OrderService implements IOrderService  {
 
@@ -96,6 +101,33 @@ public class OrderService implements IOrderService  {
         OrderDetailsDTO OrderResponseDTO = new OrderDetailsDTO();
         BeanUtils.copyProperties(order, OrderResponseDTO);
         return OrderResponseDTO;
+    }
+
+    public OrderXProductDetailsDTO getOrdersById(Integer orderId) throws OrderNotFoundException {
+        Order order = orderRepository.findById(orderId).orElse(null);
+
+        if (order == null){
+            throw new OrderNotFoundException(String.format(IS_NOT_FOUND, "order").toUpperCase());
+        }
+
+        OrderXProductDetailsDTO orderResponseDTO = new OrderXProductDetailsDTO();
+
+        orderResponseDTO.setProductList(order.getProductoOrdenList().stream().map(value -> {
+            ProductBillDTO productDTO = new ProductBillDTO();
+            BeanUtils.copyProperties(value.getProduct(), productDTO);
+            productDTO.setAmountBill(value.getAmount());
+            return productDTO;
+        }).collect(Collectors.toList()));
+
+        //bean util con user
+        orderResponseDTO.setUser(new UserDTO());
+        BeanUtils.copyProperties(order.getUser(), orderResponseDTO.getUser());
+
+        orderResponseDTO.setId(order.getId());
+        orderResponseDTO.setDate(order.getDate());
+        orderResponseDTO.setClient(order.getClient());
+        orderResponseDTO.setBill(order.getBill());
+        return orderResponseDTO;
     }
 
     private Bill createBill(List<OrderXProductDTO> orderXProductDTOs) {

@@ -110,4 +110,9 @@ public class ClientController extends ExceptionHandling {
                         "Clients deleted successfully"),
                 HttpStatus.OK);
     }
+
+    @GetMapping("/check-email")
+    public ResponseEntity<Boolean> checkEmail(@RequestParam String email) {
+        return ResponseEntity.ok(clientService.checkEmailExists(email));
+    }
 }

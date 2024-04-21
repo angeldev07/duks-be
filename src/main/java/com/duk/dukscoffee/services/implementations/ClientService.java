@@ -169,10 +169,11 @@ public class ClientService implements IClientService {
 
         return filteredClients;
     }
-
-   
-
-
+    
+    public boolean checkEmailExists(String email){
+        Client client = this.clientRepository.findByEmail(email).orElse(null);
+        return client != null;
+    }
 
      /************************************** CLASS METHOD  *******************************************/
     private void ifClientExists(String idCard, String email) throws EmailExistException, CardIdExistException{

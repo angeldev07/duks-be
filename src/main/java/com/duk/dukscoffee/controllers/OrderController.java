@@ -18,6 +18,7 @@ import com.duk.dukscoffee.exceptions.ClientNotFoundException;
 import com.duk.dukscoffee.exceptions.OrderNotFoundException;
 import com.duk.dukscoffee.exceptions.UserNotFoundException;
 import com.duk.dukscoffee.http.DTO.OrderDetailsDTO;
+import com.duk.dukscoffee.http.DTO.OrderXProductDetailsDTO;
 import com.duk.dukscoffee.http.DTO.OrderDTO;
 import com.duk.dukscoffee.services.implementations.OrderService;
 import com.duk.dukscoffee.services.interfaces.IOrderService;
@@ -29,7 +30,7 @@ import com.duk.dukscoffee.http.response.HttpResponse;
 public class OrderController {
 
     @Autowired
-    private IOrderService orderService;
+    private OrderService orderService;
 
     @PostMapping("/create")
     public ResponseEntity<HttpResponse> createOrder(@RequestBody OrderDTO orderDTO) throws UserNotFoundException, ClientNotFoundException {
@@ -52,9 +53,9 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderDetailsDTO> getOrderById(@PathVariable Integer orderId) throws OrderNotFoundException{
-        OrderDetailsDTO order = new OrderDetailsDTO();
-        BeanUtils.copyProperties(orderService.getOrderById(orderId), order);
-        return ResponseEntity.ok(order);
+    public ResponseEntity<OrderXProductDetailsDTO> getOrderById(@PathVariable Integer orderId) throws OrderNotFoundException{
+        //OrderDetailsDTO order = new OrderDetailsDTO();
+        //BeanUtils.copyProperties(orderService.getOrderById(orderId), order);
+        return ResponseEntity.ok(this.orderService.getOrdersById(orderId));
     }
 }
