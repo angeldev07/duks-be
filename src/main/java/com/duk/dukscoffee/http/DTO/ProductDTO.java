@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -28,6 +27,10 @@ public class ProductDTO {
     private Integer amount;
 
     private boolean active;
+
+    private Integer iva;
+
+    private Integer stock;
 
     private CategoryDTO category;
 

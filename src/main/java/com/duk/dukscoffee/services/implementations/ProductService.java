@@ -37,8 +37,8 @@ public class ProductService implements IProductService {
     @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
         Stock defaultStock = new Stock().builder()
-                .stock(1)
-                .amount(1)
+                .stock(productDTO.getStock())
+                .amount(productDTO.getStock())
                 .lastUpdate(new Date())
                 .build();
         Product product = modelMapper.map(productDTO, Product.class);
@@ -85,8 +85,12 @@ public class ProductService implements IProductService {
             ProductDTO productDTO = new ProductDTO();
             CategoryDTO categoryDTO = new CategoryDTO();
             BeanUtils.copyProperties(product, productDTO);
-            BeanUtils.copyProperties(product.getCategory(), categoryDTO);
-            productDTO.setCategory(categoryDTO);
+
+            if(product.getCategory() != null){
+                BeanUtils.copyProperties(product.getCategory(), categoryDTO);
+                productDTO.setCategory(categoryDTO);
+            }
+            
             return productDTO;
         }).collect(Collectors.toList());
     }
@@ -96,8 +100,12 @@ public class ProductService implements IProductService {
             ProductDTO productDTO = new ProductDTO();
             CategoryDTO categoryDTO = new CategoryDTO();
             BeanUtils.copyProperties(product, productDTO);
-            BeanUtils.copyProperties(product.getCategory(), categoryDTO);
-            productDTO.setCategory(categoryDTO);
+
+            if(product.getCategory() != null){
+                BeanUtils.copyProperties(product.getCategory(), categoryDTO);
+                productDTO.setCategory(categoryDTO);
+            }
+
             return productDTO;
         }).collect(Collectors.toList());
     }
@@ -153,6 +161,32 @@ public class ProductService implements IProductService {
         ProductDTO updatedProductDTO = new ProductDTO();
         BeanUtils.copyProperties(updatedProduct, updatedProductDTO);
         return updatedProductDTO;
+    }
+
+    public boolean deactivateProductsByBatches(List<Integer> productsIds) throws ProductNotFoundException{
+        try {
+            List<Product> products = productRepository.findAllById(productsIds);
+            for (Product product : products) {
+                product.setActive(false);
+            }
+            productRepository.saveAll(products);
+            return true;
+        } catch (Exception e) {
+            throw new ProductNotFoundException(String.format(IS_NOT_FOUND, "product").toUpperCase());
+        }
+    }
+
+    public boolean activateProductsByBatches(List<Integer> productsIds) throws ProductNotFoundException{
+        try {
+            List<Product> products = productRepository.findAllById(productsIds);
+            for (Product product : products) {
+                product.setActive(true);
+            }
+            productRepository.saveAll(products);
+            return true;
+        } catch (Exception e) {
+            throw new ProductNotFoundException(String.format(IS_NOT_FOUND, "product").toUpperCase());
+        }
     }
     
 }

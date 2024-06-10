@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.MethodNotAllowedException;
 
 import com.duk.dukscoffee.entities.Category;
+import com.duk.dukscoffee.entities.Product;
 import com.duk.dukscoffee.exceptions.CategoryExistException;
 import com.duk.dukscoffee.exceptions.CategoryNotFoundException;
 import com.duk.dukscoffee.http.DTO.CategoryDTO;
 import com.duk.dukscoffee.respositories.CategoryRepository;
+import com.duk.dukscoffee.respositories.ProductRepository;
 import com.duk.dukscoffee.services.interfaces.ICategoryService;
 
 @Service
@@ -19,6 +21,9 @@ public class CategoryService implements ICategoryService {
     
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public static final String IS_NOT_FOUND = "The %s is not found";
     public static final String IS_ALREADY_USE = "The %s is already use";
@@ -29,6 +34,7 @@ public class CategoryService implements ICategoryService {
         Category category = new Category();
         category.setName(categoryDTO.getName());
         category.setDeleteFlag(false);
+        category.setActive(categoryDTO.getActive());
         Category newCategory = categoryRepository.save(category);
         CategoryDTO newCategoryDTO = new CategoryDTO();
         BeanUtils.copyProperties(newCategory, newCategoryDTO);
@@ -56,22 +62,24 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public void deleteCategory(Integer categoryId) throws CategoryNotFoundException{
-         Category category = categoryRepository.findById(categoryId).orElse(null);
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        
         if(category == null){
             throw new CategoryNotFoundException(String.format(IS_NOT_FOUND, "category").toUpperCase()); 
         }
 
-        category.setDeleteFlag(true);
+        this.updateProductsCategory(categoryId);
 
-        categoryRepository.save(category);
+        categoryRepository.delete(category);
     }
+
     @Override
     public void deleteCategoriesByBatches(List<Integer> categoriesId){
         List<Category> categories = categoryRepository.findAllById(categoriesId);
         for (Category category : categories) {
-            category.setDeleteFlag(true);
+            this.updateProductsCategory(category.getId());
+            categoryRepository.delete(category);
         }
-        categoryRepository.saveAll(categories);
     }
 
     @Override
@@ -104,7 +112,35 @@ public class CategoryService implements ICategoryService {
        
     }
 
+    private void updateProductsCategory(Integer categoryId){
+        List<Product> products = productRepository.findByCategoryId(categoryId);
+        products.forEach(product -> {
+            product.setCategory(null);
+            productRepository.save(product);
+        });
+    }
+
+    public void enableCategoryByBatches(List<Integer> productsIds, String option) {
+       String[] options = {"on", "off"}; 
+
+        // validamos que la opción sea válida    
+        if(!options[0].equals(option) && !options[1].equals(option)){
+            throw new MethodNotAllowedException("THE OPTION IS NOT ALLOWED", null);
+        }
 
 
+        List<Category> categories = categoryRepository.findAllById(productsIds);
+
+        categories.forEach(category -> {
+           
+            if(options[0].equalsIgnoreCase(option))
+                category.setActive(true);
+            else
+                category.setActive(false);
+
+            categoryRepository.save(category);
+        });
+
+    }
 
 }

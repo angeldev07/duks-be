@@ -24,6 +24,7 @@ import com.duk.dukscoffee.exceptions.CategoryNotFoundException;
 import com.duk.dukscoffee.exceptions.ClientNotFoundException;
 import com.duk.dukscoffee.exceptions.EmailExistException;
 import com.duk.dukscoffee.exceptions.ExceptionHandling;
+import com.duk.dukscoffee.http.DTO.BatchesDTO;
 import com.duk.dukscoffee.http.DTO.CategoryDTO;
 import com.duk.dukscoffee.http.DTO.ClientDTO;
 import com.duk.dukscoffee.http.response.HttpResponse;
@@ -60,9 +61,9 @@ public class CategoryController extends ExceptionHandling {
         );
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<HttpResponse>deleteCategoryByBatches(@RequestParam List<Integer> categoriesId){
-        categoryService.deleteCategoriesByBatches(categoriesId);
+    @PostMapping("/delete")
+    public ResponseEntity<HttpResponse>deleteCategoryByBatches(@RequestBody BatchesDTO categoriesId){
+        categoryService.deleteCategoriesByBatches(categoriesId.getProductsIds());
         return new ResponseEntity<>(
                 new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Categories deleted successfully"),
                 HttpStatus.OK
@@ -98,6 +99,20 @@ public class CategoryController extends ExceptionHandling {
         );
     }
 
-    
+    @PostMapping("/on-batches")
+    public ResponseEntity<HttpResponse> enableCategoryByBatches(@RequestBody BatchesDTO categoriesId, @RequestParam String option) throws CategoryNotFoundException {
+        try {
+            categoryService.enableCategoryByBatches(categoriesId.getProductsIds(), option);
+            return new ResponseEntity<>(
+                    new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), "Categories enabled successfully"),
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    new HttpResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage()),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+    }
 
 }

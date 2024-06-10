@@ -26,5 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("SELECT p from Product p where p.deleteFlag = false")
      List<Product> findAll();
+
+    List<Product> findByCategoryId(Integer categoryId); 
        
 }

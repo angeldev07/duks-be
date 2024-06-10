@@ -40,6 +40,8 @@ public class Product {
 
     private boolean available;
 
+    private Integer iva;
+
     @Column(columnDefinition = "LONGTEXT")
     private String profileImg;
 

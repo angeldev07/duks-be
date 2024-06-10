@@ -3,6 +3,7 @@ package com.duk.dukscoffee.controllers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.duk.dukscoffee.http.DTO.BatchesDTO;
 import com.duk.dukscoffee.http.DTO.CategoryDTO;
 import com.duk.dukscoffee.http.DTO.StatsProductsDTO;
 import com.duk.dukscoffee.http.response.HttpResponse;
@@ -36,6 +37,7 @@ public class ProductController {
                         BeanUtils.copyProperties(product.getCategory(), categoryDTO);
                         productDTO.setCategory(categoryDTO);
                     }
+                    productDTO.setStock(product.getStock().getStock());
                     return productDTO;
                 }).collect(Collectors.toList()));
     }
@@ -62,9 +64,9 @@ public class ProductController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<HttpResponse> deleteProductsByBatches(@RequestParam List<Integer> productsId) {
-        productService.deleteProductsByBatches(productsId);
+    @PostMapping("/delete")
+    public ResponseEntity<HttpResponse> deleteProductsByBatches(@RequestBody BatchesDTO productsId) {
+        productService.deleteProductsByBatches(productsId.getProductsIds());
         return new ResponseEntity<>(
                 new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(),
                         "Products deleted successfully"),
@@ -85,6 +87,40 @@ public class ProductController {
                 new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(),
                         "Product updated successfully"),
                 HttpStatus.OK);
+    }
+
+    @PostMapping("/deactivate-batches")
+    public ResponseEntity<HttpResponse> deactivateProductsByBatches(@RequestBody BatchesDTO productsId) {
+       try {
+        productService.deactivateProductsByBatches(productsId.getProductsIds());
+        return new ResponseEntity<>(
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(),
+                        "Productos desactivados correctamente"),
+                HttpStatus.OK);
+       } catch (Exception e) {
+
+         return new ResponseEntity<>(
+                new HttpResponse(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(),
+                        "No se encontraron algunos productos"),
+                HttpStatus.NOT_FOUND);
+       }
+    }
+
+    @PostMapping("/activate-batches")
+    public ResponseEntity<HttpResponse> eactivateProductsByBatches(@RequestBody BatchesDTO productsId) {
+       try {
+        productService.activateProductsByBatches(productsId.getProductsIds());
+        return new ResponseEntity<>(
+                new HttpResponse(HttpStatus.OK.value(), HttpStatus.OK, HttpStatus.OK.getReasonPhrase(),
+                        "Productos desactivados correctamente"),
+                HttpStatus.OK);
+       } catch (Exception e) {
+
+         return new ResponseEntity<>(
+                new HttpResponse(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(),
+                        "No se encontraron algunos productos"),
+                HttpStatus.NOT_FOUND);
+       }
     }
 
 }

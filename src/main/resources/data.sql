@@ -146,8 +146,8 @@ VALUES
 -- Insert data in products table
 INSERT INTO products (name, base_price, amount, low_stock, active, sell, available, delete_flag, stock_id, category_id, discount)
 VALUES
-('Cafe con leche', 29.99, 50, false, true, true, true, false, 1,1,20),
-('Capucchino', 39.99, 30, false, true, true, true, false, 2,1,10);
+('Cafe con leche', 2500, 50, false, true, true, true, false, 1,1,20),
+('Capucchino', 3500, 30, false, true, true, true, false, 2,1,10);
 
 -- Insert data in bills table
 INSERT INTO bills (base_price, iva, total_price, discounts, date_bill)
