@@ -24,7 +24,7 @@ import com.duk.dukscoffee.services.implementations.ProductService;
 public class ProductController {
 
     @Autowired
-    private ProductService productService;
+    ProductService productService;
 
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getProducts() {
@@ -37,7 +37,12 @@ public class ProductController {
                         BeanUtils.copyProperties(product.getCategory(), categoryDTO);
                         productDTO.setCategory(categoryDTO);
                     }
-                    productDTO.setStock(product.getStock().getStock());
+                    if (product.getAmount() < 10) {
+                        product.setLowStock(true);
+                    } else {
+                        product.setLowStock(false);
+                    }
+                    productDTO.setStock(product.getAmount());
                     return productDTO;
                 }).collect(Collectors.toList()));
     }

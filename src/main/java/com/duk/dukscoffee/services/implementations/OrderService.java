@@ -175,8 +175,11 @@ public class OrderService implements IOrderService  {
             OrderXProduct orderXProduct = new OrderXProduct();
             orderXProduct.setProduct(product);
             orderXProduct.setAmount(orderXProductDTO.getAmount());
-            orderXProduct.setOrder(order); 
+            orderXProduct.setOrder(order);
             orderXProductRepository.save(orderXProduct);
+            product.setAmount(product.getAmount()-orderXProductDTO.getAmount());
+            productRepository.save(product);
+
         }
     }
 }

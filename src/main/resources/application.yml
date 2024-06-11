@@ -7,12 +7,12 @@ spring:
       mode: always
   datasource:
     url: jdbc:mysql://localhost:3306/duks-coffee
-    username: 
-    password: 
+    username:
+    password:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto:  update
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect

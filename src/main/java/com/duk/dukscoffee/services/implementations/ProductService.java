@@ -44,13 +44,24 @@ public class ProductService implements IProductService {
         Product product = modelMapper.map(productDTO, Product.class);
         product.setCategory((Category) modelMapper.map(productDTO.getCategory(), Category.class));
         product.setStock(defaultStock);
+        product.setAmount(productDTO.getStock());
         productRepository.save(product);
         return (ProductDTO) modelMapper.map(product, ProductDTO.class);
     }
 
     @Override
     public List<Product> getProducts() {
-        return (List<Product>) productRepository.findAll();
+        List<Product> products = (List<Product>) productRepository.findAll();
+        for (Product product : products) {
+            if (product.getAmount() < 10) {
+                product.setLowStock(true);
+            } else {
+                product.setLowStock(false);
+            }
+            productRepository.save(product);
+        }
+        return products;
+
     }
 
     @Override
@@ -96,6 +107,7 @@ public class ProductService implements IProductService {
     }
 
     public List<ProductDTO> getProductsLowStock() {
+        this.getProducts();
         return productRepository.findByLowStock().stream().map(product -> {
             ProductDTO productDTO = new ProductDTO();
             CategoryDTO categoryDTO = new CategoryDTO();
@@ -148,9 +160,11 @@ public class ProductService implements IProductService {
         if (product == null)
             throw new ProductNotFoundException(String.format(IS_NOT_FOUND, "product").toUpperCase());
         product.setName(productDTO.getName());
-        product.setBasePrice(productDTO.getBasePrice());
-        product.setAmount(productDTO.getAmount());
         product.setCategory((Category) modelMapper.map(productDTO.getCategory(), Category.class));
+        product.setBasePrice(productDTO.getBasePrice());
+        product.setAmount(productDTO.getStock());
+        product.setActive(productDTO.isActive());
+        product.setIva(productDTO.getIva());
 
         if (productDTO.getProfileImg() != null) {
             product.setProfileImg(productDTO.getProfileImg());

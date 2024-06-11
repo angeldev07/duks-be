@@ -128,8 +128,8 @@ VALUES
 -- Insert data in clients table
 INSERT INTO clients (name, last_name, email, card_id, gender, birth_day, active, last_visit, address, phone,delete_flag)
 VALUES
-('Juan', 'Perez', 'juan@example.com', 'ABC123', 'M', '1990-01-15', true, '2023-11-21', 'Calle 123', '123-456-7890',0),
-('Maria', 'Gomez', 'maria@example.com', 'XYZ789', 'F', '1985-05-10', true, '2023-11-20', 'Avenida 456', '987-654-3210',0);
+('Juan', 'Perez', 'juan@example.com', '1005879563', 'M', '1990-01-15', true, '2023-11-21', 'Calle 123', '123-456-7890',0),
+('Maria', 'Gomez', 'maria@example.com', '1007346589', 'F', '1985-05-10', true, '2023-11-20', 'Avenida 456', '987-654-3210',0);
 
 -- Insert data in stock table
 INSERT INTO stock (amount, stock, last_update)
