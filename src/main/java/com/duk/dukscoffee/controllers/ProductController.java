@@ -37,7 +37,7 @@ public class ProductController {
                         BeanUtils.copyProperties(product.getCategory(), categoryDTO);
                         productDTO.setCategory(categoryDTO);
                     }
-                    productDTO.setStock(product.getStock().getStock());
+                    productDTO.setStock(product.getAmount());
                     return productDTO;
                 }).collect(Collectors.toList()));
     }

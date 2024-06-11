@@ -44,6 +44,7 @@ public class ProductService implements IProductService {
         Product product = modelMapper.map(productDTO, Product.class);
         product.setCategory((Category) modelMapper.map(productDTO.getCategory(), Category.class));
         product.setStock(defaultStock);
+        product.setAmount(productDTO.getStock());
         productRepository.save(product);
         return (ProductDTO) modelMapper.map(product, ProductDTO.class);
     }
@@ -148,9 +149,11 @@ public class ProductService implements IProductService {
         if (product == null)
             throw new ProductNotFoundException(String.format(IS_NOT_FOUND, "product").toUpperCase());
         product.setName(productDTO.getName());
-        product.setBasePrice(productDTO.getBasePrice());
-        product.setAmount(productDTO.getAmount());
         product.setCategory((Category) modelMapper.map(productDTO.getCategory(), Category.class));
+        product.setBasePrice(productDTO.getBasePrice());
+        product.setAmount(productDTO.getStock());
+        product.setActive(productDTO.isActive());
+        product.setIva(productDTO.getIva());
 
         if (productDTO.getProfileImg() != null) {
             product.setProfileImg(productDTO.getProfileImg());
