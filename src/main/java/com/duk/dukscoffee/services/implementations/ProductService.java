@@ -4,19 +4,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.duk.dukscoffee.entities.Stock;
 import com.duk.dukscoffee.http.DTO.CategoryDTO;
 import com.duk.dukscoffee.http.DTO.StatsProductsDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.server.MethodNotAllowedException;
 
 import com.duk.dukscoffee.entities.Category;
 import com.duk.dukscoffee.entities.Product;
-import com.duk.dukscoffee.exceptions.CategoryNotFoundException;
 import com.duk.dukscoffee.exceptions.ProductNotFoundException;
 import com.duk.dukscoffee.http.DTO.ProductDTO;
 import com.duk.dukscoffee.respositories.ProductRepository;
@@ -36,14 +33,8 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
-        Stock defaultStock = new Stock().builder()
-                .stock(productDTO.getStock())
-                .amount(productDTO.getStock())
-                .lastUpdate(new Date())
-                .build();
         Product product = modelMapper.map(productDTO, Product.class);
         product.setCategory((Category) modelMapper.map(productDTO.getCategory(), Category.class));
-        product.setStock(defaultStock);
         product.setAmount(productDTO.getStock());
         productRepository.save(product);
         return (ProductDTO) modelMapper.map(product, ProductDTO.class);
@@ -109,6 +100,21 @@ public class ProductService implements IProductService {
     public List<ProductDTO> getProductsLowStock() {
         this.getProducts();
         return productRepository.findByLowStock().stream().map(product -> {
+            ProductDTO productDTO = new ProductDTO();
+            CategoryDTO categoryDTO = new CategoryDTO();
+            BeanUtils.copyProperties(product, productDTO);
+
+            if(product.getCategory() != null){
+                BeanUtils.copyProperties(product.getCategory(), categoryDTO);
+                productDTO.setCategory(categoryDTO);
+            }
+
+            return productDTO;
+        }).collect(Collectors.toList());
+    }
+
+    public List<ProductDTO> getProductsWithCategory() {
+        return productRepository.findByCategory().stream().map(product -> {
             ProductDTO productDTO = new ProductDTO();
             CategoryDTO categoryDTO = new CategoryDTO();
             BeanUtils.copyProperties(product, productDTO);

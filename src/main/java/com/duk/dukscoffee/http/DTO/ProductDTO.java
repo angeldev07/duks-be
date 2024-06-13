@@ -19,8 +19,6 @@ public class ProductDTO {
     private Integer id;
 
     private String name;
-
-    private Double discount;
     
     private Double basePrice;
 

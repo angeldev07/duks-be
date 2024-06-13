@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS products (
     available BOOLEAN,
     profile_img LONGTEXT,
     delete_flag BOOLEAN,
-    discount DOUBLE
+    iva INT
 );
 
 -- Create category table.
@@ -33,14 +33,6 @@ CREATE TABLE IF NOT EXISTS categories (
     name VARCHAR(255),
     active BOOLEAN,
     delete_flag BOOLEAN
-);
-
--- Create Stock table.
-CREATE TABLE IF NOT EXISTS stock (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    amount INT,
-    stock INT,
-    last_update DATE
 );
 
 -- Create Order table.
@@ -52,10 +44,7 @@ CREATE TABLE IF NOT EXISTS orders (
 -- Create Bill table.
 CREATE TABLE IF NOT EXISTS bills (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    base_price DOUBLE,
-    iva BOOLEAN,
     total_price DOUBLE,
-    discounts DOUBLE,
     date_bill DATE
 );
 
@@ -87,12 +76,10 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
-------------------------------- CONSTRAINT ABOUT FOREIGN KEY -------------------------------------
+-- ----------------------------- CONSTRAINT ABOUT FOREIGN KEY -------------------------------------
 
 -- FOREIGN KEY product with stock.
 ALTER TABLE products
-    ADD COLUMN stock_id INT NOT NULL,
-    ADD CONSTRAINT fk_stock_id FOREIGN KEY (stock_id) REFERENCES stock (id),
     ADD COLUMN category_id INT,
     ADD CONSTRAINT fk_category_id FOREIGN KEY (category_id) REFERENCES categories (id);
 
@@ -118,7 +105,7 @@ CREATE TABLE IF NOT EXISTS orders_x_products (
 
 -- ----------------------------------------------------------------------------------------------------------------------------------
 
-------------------------------- INSERT VALUES  -------------------------------------
+-- ----------------------------- INSERT VALUES  -------------------------------------
 -- Insert data in users table
 INSERT INTO users (first_name, last_name, email, password, rol)
 VALUES
@@ -131,12 +118,6 @@ VALUES
 ('Juan', 'Perez', 'juan@example.com', '1005879563', 'M', '1990-01-15', true, '2023-11-21', 'Calle 123', '123-456-7890',0),
 ('Maria', 'Gomez', 'maria@example.com', '1007346589', 'F', '1985-05-10', true, '2023-11-20', 'Avenida 456', '987-654-3210',0);
 
--- Insert data in stock table
-INSERT INTO stock (amount, stock, last_update)
-VALUES
-(100, 80, '2023-11-21'),
-(150, 120, '2023-11-20');
-
 -- Insert data in categories table
 INSERT INTO categories (name,active, delete_flag)
 VALUES
@@ -144,16 +125,16 @@ VALUES
     ('Cafes', 1 ,0);
 
 -- Insert data in products table
-INSERT INTO products (name, base_price, amount, low_stock, active, sell, available, delete_flag, stock_id, category_id, discount)
+INSERT INTO products (name, base_price, amount, low_stock, active, sell, available, delete_flag, category_id, iva)
 VALUES
-('Cafe con leche', 2500, 50, false, true, true, true, false, 1,1,20),
-('Capucchino', 3500, 30, false, true, true, true, false, 2,1,10);
+('Cafe con leche', 2500, 50, false, true, true, true, false,1, 5),
+('Capucchino', 3500, 30, false, true, true, true, false,1, 5);
 
 -- Insert data in bills table
-INSERT INTO bills (base_price, iva, total_price, discounts, date_bill)
+INSERT INTO bills (total_price, date_bill)
 VALUES
-(100.00, true, 120.00, 5.00, '2023-11-21'),
-(150.00, false, 150.00, 10.00, '2023-11-20');
+(13125.00, '2023-11-21'),
+(11025.00, '2023-11-20');
 
 -- Insert data in orders table
 INSERT INTO orders (date, user_id, client_id, bill_id)

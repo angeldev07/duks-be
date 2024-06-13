@@ -60,6 +60,11 @@ public class ProductController {
         return productService.getStats();
     }
 
+    @GetMapping("/withCat")
+    public List<ProductDTO> getProductsWithCategories() {
+        return productService.getProductsWithCategory();
+    }
+
     @DeleteMapping("/delete/{productId}")
     public ResponseEntity<HttpResponse> deleteProduct(@PathVariable Integer productId) throws ProductNotFoundException {
         productService.deleteProduct(productId);

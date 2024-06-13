@@ -31,6 +31,8 @@ public class OrderService implements IOrderService  {
     public static final String IS_ALREADY_USE = "The %s is already use";
     public static final String IS_NOT_FOUND = "The %s is not found";
     public static final String IS_NOT_ALLOWED = "The %s is not allowed";
+    public static final String EXC_IN_STOCK = "The quantity exceeds the stock of the product";
+
     @Autowired
     private OrderRepository orderRepository;
 
@@ -64,7 +66,20 @@ public class OrderService implements IOrderService  {
         if (client == null) {
             throw new ClientNotFoundException(String.format(IS_NOT_FOUND, "client").toUpperCase());
         }
-        
+        for (OrderXProductDTO orderXProductDTO : orderDTO.getOrderxproducts()) {
+            Product product = productRepository.findById(orderXProductDTO.getProductId())
+                    .orElseThrow(() -> new RuntimeException((String.format(IS_NOT_FOUND, "Product").toUpperCase())));
+            product.setAmount(product.getAmount()-orderXProductDTO.getAmount());
+            if(product.getAmount()<0){
+                throw new RuntimeException((String.format(EXC_IN_STOCK, "Product").toUpperCase()));
+            } else {
+                if(product.getAmount() == 0 ){
+                    product.setActive(false);
+                }
+            }
+                productRepository.save(product);
+        }
+
         client.setLastVisit(new Date());
         clientRepository.save(client);
         Order order = new Order();
@@ -74,11 +89,10 @@ public class OrderService implements IOrderService  {
 
         Bill bill = createBill(orderDTO.getOrderxproducts());
         order.setBill(bill);
-        
 
         order = orderRepository.save(order);
-        createOrderXProducts(orderDTO.getOrderxproducts(), order.getId());
 
+        createOrderXProducts(orderDTO.getOrderxproducts(), order.getId());
         OrderDTO createdOrderDTO = new OrderDTO();
         BeanUtils.copyProperties(order, createdOrderDTO);
         return createdOrderDTO;
@@ -133,33 +147,22 @@ public class OrderService implements IOrderService  {
     private Bill createBill(List<OrderXProductDTO> orderXProductDTOs) {
         
         Bill bill = new Bill();
-        bill.setIva(true);
         double basePrice = 0.0;
         double totalPrice = 0.0;
-        double totalDiscount = 0.0;
-        double productTotalPrice =0.0;
+        double productTotalPrice = 0.0;
+        double productBasePrice = 0.0;
 
 
         for (OrderXProductDTO orderXProductDTO : orderXProductDTOs) {
             Product product = productRepository.findById(orderXProductDTO.getProductId())
                     .orElseThrow(() -> new RuntimeException((String.format(IS_NOT_FOUND, "product").toUpperCase())));
-            if(product.getDiscount()> 0){
-                double discount = product.getBasePrice() * product.getDiscount() / 100;
-                totalDiscount += discount *orderXProductDTO.getAmount(); 
-             productTotalPrice = (product.getBasePrice() - discount) * orderXProductDTO.getAmount();
-
-            } else{
-                productTotalPrice = product.getBasePrice() * orderXProductDTO.getAmount();
-            }
-            
-            basePrice += productTotalPrice;
-            totalPrice += productTotalPrice*1.19;
+                productBasePrice = product.getBasePrice() * orderXProductDTO.getAmount();
+                productTotalPrice = productBasePrice + (productBasePrice * ((double) product.getIva() /100));
+            totalPrice += productTotalPrice;
 
             // Updated Product Stock ... Stand By
         }
 
-        bill.setDiscounts(totalDiscount);
-        bill.setBasePrice(basePrice);
         bill.setTotalPrice(totalPrice);
         bill.setDateBill(new Date());
 
@@ -177,8 +180,6 @@ public class OrderService implements IOrderService  {
             orderXProduct.setAmount(orderXProductDTO.getAmount());
             orderXProduct.setOrder(order);
             orderXProductRepository.save(orderXProduct);
-            product.setAmount(product.getAmount()-orderXProductDTO.getAmount());
-            productRepository.save(product);
 
         }
     }

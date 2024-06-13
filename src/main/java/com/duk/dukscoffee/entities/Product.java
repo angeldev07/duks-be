@@ -20,15 +20,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "stock_id", referencedColumnName = "id")
-    private Stock stock;
-
     private String name;
 
     private Double basePrice;
-
-    private Double discount;
 
     private Integer amount;
 

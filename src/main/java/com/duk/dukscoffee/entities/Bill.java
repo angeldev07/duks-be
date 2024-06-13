@@ -20,13 +20,7 @@ public class Bill {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Integer id;
 
-    private Double basePrice;
-
-    private boolean iva;
-
     private Double totalPrice;
-
-    private Double discounts;
 
     private Date dateBill;
 
